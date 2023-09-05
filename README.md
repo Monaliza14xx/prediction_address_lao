@@ -13,24 +13,25 @@ npm install prediction_address_lao
 
 ## Usage
 ```
-const findNearestPoint = require('prediction_address_lao');
+const findNearestPoint = require("prediction_address_lao");
 
-const inputLongitude = 102.44820999; // Replace with the desired longitude
-const inputLatitude = 17.98316999; // Replace with the desired latitude
+// Input coordinates in the format [latitude, longitude]
+const inputCoordinates = [102.54397558, 18.00387184];
 
-try {
-  const nearestPoint = findNearestPoint(inputLongitude, inputLatitude);
-  if (nearestPoint) {
-    console.log("Nearest Point Properties:");
-    for (const key in nearestPoint) {
-      if (nearestPoint.hasOwnProperty(key)) {
+// Call the function to find the nearest point
+findNearestPoint(inputCoordinates)
+  .then((nearestPoint) => {
+    if (nearestPoint) {
+      console.log("Nearest Point Properties:");
+      for (const key in nearestPoint) {
         console.log(`${key}: ${nearestPoint[key]}`);
       }
+    } else {
+      console.log("No matching coordinates found.");
     }
-  } else {
-    console.log("No matching coordinates found in the JSON data.");
-  }
-} catch (error) {
-  console.error(error.message);
-}
+  })
+  .catch((error) => {
+    console.error("An error occurred:", error);
+  });
+
 ```

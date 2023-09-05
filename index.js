@@ -1,13 +1,12 @@
 const axios = require("axios");
 
-async function findNearestPoint(inputLongitude, inputLatitude) {
+async function findNearestPoint(inputCoordinates) {
   const url =
-    "https://data.opendevelopmentmekong.net/geoserver/ODMekong/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=ODMekong%3Adata&outputFormat=application%2Fjson";
+    "https://raw.githubusercontent.com/Monaliza14xx/prediction_address_lao/main/features.json";
   try {
     // Fetch JSON data from the URL
     const response = await axios.get(url);
-    const data = response?.data?.features; // Already parsed JSON
-    // console.log("🚀 ~ file: index.js:10 ~ findNearestPoint ~ data:", data)
+    const data = response?.data; // Already parsed JSON
 
     // Initialize variables to store the nearest point and its properties
     let nearestPoint = null;
@@ -15,8 +14,8 @@ async function findNearestPoint(inputLongitude, inputLatitude) {
 
     // Define the Haversine distance calculation function
     function calculateDistance(coord1, coord2) {
-      const [lon1, lat1] = coord1;
-      const [lon2, lat2] = coord2;
+      const [lat1, lon1] = coord1;
+      const [lat2, lon2] = coord2;
       const radius = 6371; // Earth's radius in kilometers
       const radLat1 = (lat1 * Math.PI) / 180;
       const radLon1 = (lon1 * Math.PI) / 180;
@@ -33,17 +32,13 @@ async function findNearestPoint(inputLongitude, inputLatitude) {
     }
 
     // Iterate through the features in the JSON data
-    
-    for (const feature of data) {
+    for (const feature of data.features) {
       if (feature.geometry.type === "Point") {
         // Extract the coordinates of the current feature
         const coordinates = feature.geometry.coordinates;
 
         // Calculate the distance between the input and current coordinates
-        const distance = calculateDistance(
-          [inputLongitude, inputLatitude],
-          coordinates
-        );
+        const distance = calculateDistance(inputCoordinates, coordinates);
 
         // Check if this is the nearest point so far
         if (distance < nearestDistance) {

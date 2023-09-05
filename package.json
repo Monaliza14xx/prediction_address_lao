@@ -1,6 +1,6 @@
 {
   "name": "prediction_address_lao",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "a package that offers predictions for location information in Laos, specifically provinces, districts, and villages.",
   "main": "index.js",
   "scripts": {

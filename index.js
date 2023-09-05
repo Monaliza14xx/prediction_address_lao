@@ -1,12 +1,39 @@
-const axios = require("axios");
+const https = require('https');
+
+async function fetchDataFromUrl(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, (response) => {
+      let data = '';
+
+      // Receive data in chunks
+      response.on('data', (chunk) => {
+        data += chunk;
+      });
+
+      // When all data is received
+      response.on('end', () => {
+        try {
+          const jsonData = JSON.parse(data);
+          resolve(jsonData);
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+      // Handle errors
+      response.on('error', (error) => {
+        reject(error);
+      });
+    });
+  });
+}
 
 async function findNearestPoint(inputCoordinates) {
   const url =
     "https://raw.githubusercontent.com/Monaliza14xx/prediction_address_lao/main/features.json";
   try {
     // Fetch JSON data from the URL
-    const response = await axios.get(url);
-    const data = response?.data; // Already parsed JSON
+    const data = await fetchDataFromUrl(url);
 
     // Initialize variables to store the nearest point and its properties
     let nearestPoint = null;
